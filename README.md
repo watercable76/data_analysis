@@ -34,6 +34,12 @@ to my VS Code. This way I can write content while ensuring it works and is visua
 I used Python3 for this small assignment.  
 I also used the matplotlib library to work with the data.
 
+To install the matplotlib library, run the following command in your terminal:  
+
+```python
+    python -m pip install -U matplotlib 
+```
+
 <p>&nbsp;</p>
 
 # Useful Websites
