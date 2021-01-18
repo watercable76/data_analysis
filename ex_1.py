@@ -76,6 +76,24 @@ ax.set_title('line plot with data points')
 # display the plot
 plt.show()
 
+"""
+Work with the data here
+Options for the user:
+1) Find high and low of life expect
+2) Find all data for a certain country - high and low, and average
+3) Find average for each country. Store in dictionary, if country code exists
+   then set that as key.
+
+"""
+
+
+def options():
+    # print out the options for the user to input
+    print('Here are some options to see trends within the data: \
+        \t1) Check a certain year.\n\
+        \t2) Find the high, low and average for a certain country.\n\
+        \t3) Find the average for all countries.\n')
+
 
 # Open the file
 with open('life-expectancy.csv') as data:
@@ -91,15 +109,32 @@ with open('life-expectancy.csv') as data:
     ly = 0
     avg = 0
 
+    options()
+
+    choice = input('What would you like to do? (type 0 to see the options again) ')
+
+    while type(choice) != int:
+        print(f'This is not an whole number. Please input a valid value.')
+        choice = input('What would you like to do? (type 0 to see the options again) ')
+
+    # if the user types 0, they will see the options again.
+    if choice == '0':
+        options()
+
+    # if the choice is not from 1-3, set choice as default for displaying
+    if choice not in ['1', '2', '3']:
+        choice = '9'
+
+    # convert choice to an int.
+    choice = int(choice)
+
     right = 'empty'
 
-    # Prompt the user to see if they want to check a certain year
-    y_n = input(
-        'Would you like to see a certain year? Type \'yes\' for yes and \'no\' for no. ')
-
-    if y_n.lower() == 'yes':
+    if choice == 1:
         # Prompt the user for a year
-        choice = int(input('Please enter a year you would like to check: '))
+        year_choice = int(input('Please enter a year you would like to check: '))
+    elif choice == 2:
+        coun_choice = input("What country would you like to check: ")
 
     for line in data:
         cl = line.strip().split(',')
@@ -110,7 +145,7 @@ with open('life-expectancy.csv') as data:
 
         # check to see if the user did pick a year
 
-        if y_n.lower() != 'yes':
+        if choice == 9:
             # find new life expect high
             if life_expec > lfh:
                 lfh = life_expec
@@ -123,7 +158,7 @@ with open('life-expectancy.csv') as data:
                 ly = year
         else:
             # check to see if the year input is the year in the database
-            if choice == year:
+            if year_choice == year:
                 # Make sure data is printing out correctly
                 right = 'right_stuff'
                 # find new life expect high
@@ -138,6 +173,8 @@ with open('life-expectancy.csv') as data:
                     ly = year
 
     # print out the highs and lows
-    print(f'The highest life expect was {lfh} in the year {hy} in the country {hc}.')
-    print(f'The highest life expect was {lfl} in the year {ly} in the country {lc}.')
+    print(
+        f'The highest life expect was {lfh} in the year {hy} in the country {hc}.')
+    print(
+        f'The highest life expect was {lfl} in the year {ly} in the country {lc}.')
     print(right, choice)
