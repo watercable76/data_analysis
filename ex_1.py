@@ -88,8 +88,8 @@ Options for the user:
 
 
 def options():
-    # print out the options for the user to input
-    print('Here are some options to see trends within the data: \
+    """Print out the options for the user to input. """
+    print('Here are some options to see trends within the data: \n\
         \t1) Check a certain year.\n\
         \t2) Find the high, low and average for a certain country.\n\
         \t3) Find the average for all countries.\n')
@@ -109,19 +109,30 @@ with open('life-expectancy.csv') as data:
     ly = 0
     avg = 0
 
+    # dic declaration to hold all countries values.
+    all_countries = dict()
+
+    prompt = 'What would you like to do? (type 0 to see the options again) '
+
     options()
 
-    choice = input('What would you like to do? (type 0 to see the options again) ')
+    choice = input(prompt)
 
     # not working to error check
     # while type(int(choice)) != int:
     #     print(f'This is not an whole number. Please input a valid value.')
     #     choice = input('What would you like to do? (type 0 to see the options again) ')
 
+    try:
+        choice = int(choice)
+    except ValueError:
+        print("That is not a whole number!")
+
     # if the user types 0, they will see the options again.
     while choice == '0':
         options()
-        choice = input('What would you like to do? (type 0 to see the options again) ')
+        choice = input(
+            'What would you like to do? (type 0 to see the options again) ')
 
     # if the choice is not from 1-3, set choice as default for displaying
     if choice not in ['1', '2', '3']:
@@ -134,7 +145,8 @@ with open('life-expectancy.csv') as data:
 
     if choice == 1:
         # Prompt the user for a year
-        year_choice = int(input('Please enter a year you would like to check: '))
+        year_choice = int(
+            input('Please enter a year you would like to check: '))
     elif choice == 2:
         coun_choice = input("What country would you like to check: ")
 
@@ -158,9 +170,29 @@ with open('life-expectancy.csv') as data:
                 lfl = life_expec
                 lc = country
                 ly = year
+        # Find the high/low for a specific year
         elif choice == 1:
             # check to see if the year input is the year in the database
             if year_choice == year:
+                # Make sure data is printing out correctly
+                right = 'right_stuff'
+                # find new life expect high
+                if life_expec > lfh:
+                    lfh = life_expec
+                    hc = country
+                    hy = year
+                # find new life expect low
+                if life_expec < lfl:
+                    lfl = life_expec
+                    lc = country
+                    ly = year
+        # find the average of all the countries
+        elif choice == 2:
+            # check to see if country code is in the dictionary
+            if code in all_countries[0]:
+                all_countries[code] += [life_expec, 1]
+            else:
+                all_countries[code] = [life_expec, 1]
                 # Make sure data is printing out correctly
                 right = 'right_stuff'
                 # find new life expect high
