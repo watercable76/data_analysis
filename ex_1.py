@@ -113,13 +113,15 @@ with open('life-expectancy.csv') as data:
 
     choice = input('What would you like to do? (type 0 to see the options again) ')
 
-    while type(choice) != int:
-        print(f'This is not an whole number. Please input a valid value.')
-        choice = input('What would you like to do? (type 0 to see the options again) ')
+    # not working to error check
+    # while type(int(choice)) != int:
+    #     print(f'This is not an whole number. Please input a valid value.')
+    #     choice = input('What would you like to do? (type 0 to see the options again) ')
 
     # if the user types 0, they will see the options again.
-    if choice == '0':
+    while choice == '0':
         options()
+        choice = input('What would you like to do? (type 0 to see the options again) ')
 
     # if the choice is not from 1-3, set choice as default for displaying
     if choice not in ['1', '2', '3']:
@@ -156,7 +158,7 @@ with open('life-expectancy.csv') as data:
                 lfl = life_expec
                 lc = country
                 ly = year
-        else:
+        elif choice == 1:
             # check to see if the year input is the year in the database
             if year_choice == year:
                 # Make sure data is printing out correctly
