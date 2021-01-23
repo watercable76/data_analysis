@@ -3,7 +3,9 @@
 <p>&nbsp;</p>
 
 ## Description
-This software allows the user to view and work with a data set.
+This software allows the user to view and work with a data set about life-expectancy  
+for many countries and from the year 1543 to 2019. The link to the website and instructions  
+is listed below in the Useful Websites section. 
 
 <p>&nbsp;</p>
 
@@ -39,4 +41,9 @@ Instead of using a library like Pandas, I just used python and wrote scripts to 
 
 # Useful Websites
 
-* [Matplotlib](https://matplotlib.org/)
+[Life Expectancy](https://ourworldindata.org/spanish-flu-largest-influenza-pandemic-in-history)
+
+Go to the website above, and navigate to the first graph on the right side of the page.  
+Click on the *Download* tab, and then click on the button to download the file.  
+If you are going to use this document for your own queries, make sure you are in the  
+right workspace and the filepath is correct.  
