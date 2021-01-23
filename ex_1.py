@@ -70,7 +70,14 @@ while True:
 # if the user types 0, they will see the options again.
 while choice == 0:
     options()
-    choice = int(input(choice_prompt))
+    while True:
+        choice = input(choice_prompt)
+        try:
+            choice = int(choice)
+        except ValueError:
+            print("That is not a whole number!")
+        else:
+            break
 
 if choice not in [1, 2, 3]:
     choice = 9
