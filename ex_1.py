@@ -30,6 +30,21 @@ def options():
         \n".expandtabs(4))
 
 
+def print_set(a_set, num):
+    """
+    Print out the countries from the set, and specify how many
+    countries to be printed out.
+    """
+    print("Here are some countries that you could check.\n")
+    stop = num
+    for i in a_set:
+        print(f'{i}, ', end='')
+        stop -= 1
+        if stop <= 0:
+            print(f'{i}\n')
+            break
+
+
 """
 Next chunk of code validates the input from the user, from getting the input
 to getting the option choice they choose.
@@ -60,7 +75,11 @@ while choice == 0:
 if choice not in [1, 2, 3]:
     choice = 9
 
-# open the file to get country names
+
+"""
+Open the file once to get country names in order to allow the user to have some options
+if they decide to choose option 2.
+"""
 with open('life-expectancy.csv') as information:
     next(information)
 
@@ -91,10 +110,13 @@ if choice == 1:
             else:
                 break
 elif choice == 2:
-    print("Here are some countries that you could check.")
-    for i in my_set:
-        print(i)
-    coun_choice = input("What country would you like to check: ")
+    while True:
+        print_set(my_set, 10)
+        coun_choice = input("What country would you like to check: ")
+        if coun_choice not in my_set:
+            print("I'm sorry, but you input a country that does not exist or you mistyped the name.")
+        else:
+            break
 elif choice == 3:
     while True:
         all_choice = input(all_prompt)
@@ -219,7 +241,6 @@ with open('life-expectancy.csv') as data:
                 break
 
     print('\n')
-    # print(my_set)
 
     # print out the high/low if use did not choose country option.
     if choice == 9 or choice == 1:
