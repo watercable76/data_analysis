@@ -8,8 +8,8 @@ This software allows the user to view and work with a data set.
 <p>&nbsp;</p>
 
 ## Purpose 
-This python based project will explore a set of data, demonstrating the power and capability of matplotlib  
-with the provided data.  
+This python based project will explore a set of data, demostrating the ability to find certain data
+by using python to query and display important data.  
 
 <p>&nbsp;</p>
 
@@ -32,13 +32,8 @@ to my VS Code. This way I can write content while ensuring it works and is visua
 
 ## Programming Language
 I used Python3 for this small assignment.  
-I also used the matplotlib library to work with the data.
+Instead of using a library like Pandas, I just used python and wrote scripts to run through the data.   
 
-To install the matplotlib library, run the following command in your terminal:  
-
-```python
-    python -m pip install -U matplotlib 
-```
 
 <p>&nbsp;</p>
 

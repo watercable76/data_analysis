@@ -3,78 +3,8 @@ Author: Nicholas Cable, el cablecito
 Date Created: 1/13/2021
 Purpose: Work with an example data set using matplotlib,
         and display some graphs with the data.
-Last updated: ...
+Last updated: 1/23/2021
 """
-
-# import matplotlib.pyplot as plt
-# import numpy as np
-
-# fig, ax = plt.subplots()
-# ax.plot([1, 2, 3, 4], [1, 4, 2, 3])
-# plt.plot([1, 2, 3, 4], [1, 4, 2, 3])
-
-# # create an empty figure w/o aces
-# fig = plt.figure()
-
-# # a figure with a single axes
-# fig, ax = plt.subplots()
-
-# # a figure with a 2x2 grid of axes
-# fig, axs = plt.subplots(2, 2)
-
-
-import matplotlib.pyplot as plt
-from matplotlib.collections import EventCollection
-import numpy as np
-
-# Fixing random state for reproducibility
-np.random.seed(19680801)
-
-# create random data
-xdata = np.random.random([2, 10])
-
-# split the data into two parts
-xdata1 = xdata[0, :]
-xdata2 = xdata[1, :]
-
-# sort the data so it makes clean curves
-xdata1.sort()
-xdata2.sort()
-
-# create some y data points
-ydata1 = xdata1 ** 2
-ydata2 = 1 - xdata2 ** 3
-
-# plot the data
-fig = plt.figure()
-ax = fig.add_subplot(1, 1, 1)
-ax.plot(xdata1, ydata1, color='tab:blue')
-ax.plot(xdata2, ydata2, color='tab:orange')
-
-# create the events marking the x data points
-xevents1 = EventCollection(xdata1, color='tab:blue', linelength=0.05)
-xevents2 = EventCollection(xdata2, color='tab:orange', linelength=0.05)
-
-# create the events marking the y data points
-yevents1 = EventCollection(ydata1, color='tab:blue', linelength=0.05,
-                           orientation='vertical')
-yevents2 = EventCollection(ydata2, color='tab:orange', linelength=0.05,
-                           orientation='vertical')
-
-# add the events to the axis
-ax.add_collection(xevents1)
-ax.add_collection(xevents2)
-ax.add_collection(yevents1)
-ax.add_collection(yevents2)
-
-# set the limits
-ax.set_xlim([0, 1])
-ax.set_ylim([0, 1])
-
-ax.set_title('line plot with data points')
-
-# display the plot
-plt.show()
 
 """
 Work with the data here
@@ -93,7 +23,90 @@ def options():
         \t1) Check a certain year.\n\
         \t2) Find the high, low and average for a certain country.\n\
         \t3) Find the average for all countries.\n')
+    print("\nIf you do not care to see about these options, you can \
+        \nenter '9' or any number besides 1, 2 or 3 and we will display \
+        \nthe highest life expectancy, with the associated country and year,\
+        \nand the lowest life expectancy, with the associated country and year.\
+        \n".expandtabs(4))
 
+
+"""
+Next chunk of code validates the input from the user, from getting the input
+to getting the option choice they choose.
+"""
+
+choice_prompt = 'What would you like to do? (type 0 to see the options again) '
+year_prompt = 'Please enter a year you would like to check. Please note,\
+                \nthe valid years are from 1543 up to 2019. '
+all_prompt = 'How many averages do you want to see? '
+
+options()
+
+# Make sure the user inputs a whole number
+while True:
+    choice = input(choice_prompt)
+    try:
+        choice = int(choice)
+    except ValueError:
+        print("That is not a whole number!")
+    else:
+        break
+
+# if the user types 0, they will see the options again.
+while choice == 0:
+    options()
+    choice = int(input(choice_prompt))
+
+if choice not in [1, 2, 3]:
+    choice = 9
+
+# open the file to get country names
+with open('life-expectancy.csv') as information:
+    next(information)
+
+    # store all of the codes and country names here
+    my_set = set()
+
+    # get the country names in a set to show some options for the user
+    for stuff in information:
+        info = stuff.strip().split(',')
+        c_name = info[0]
+
+        my_set.add(c_name)
+
+# Prompt the user for the year or country or how many country avgs they want to see
+# Do try/except for each of the values
+if choice == 1:
+    # Prompt the user for a year
+    # valid year is from 1543 to 2019
+    while True:
+        year_choice = input(year_prompt)
+        try:
+            year_choice = int(year_choice)
+        except ValueError:
+            print("That is not a year value.\n")
+        else:
+            if year_choice < 1543 or year_choice > 2019:
+                print("That is an invalid year.\n")
+            else:
+                break
+elif choice == 2:
+    print("Here are some countries that you could check.")
+    for i in my_set:
+        print(i)
+    coun_choice = input("What country would you like to check: ")
+elif choice == 3:
+    while True:
+        all_choice = input(all_prompt)
+        try:
+            all_choice = int(all_choice)
+        except ValueError:
+            print("That is not a valid number.\n")
+        else:
+            if all_choice < 1 or all_choice > 100:
+                print("That is an invalid number of averages.\n")
+            else:
+                break
 
 # Open the file
 with open('life-expectancy.csv') as data:
@@ -101,54 +114,28 @@ with open('life-expectancy.csv') as data:
     next(data)
 
     # Data to be used in comparisons and outputs
-    lfh = 0
-    lfl = 999
+    h_lf = 0
+    l_lf = 999
     hc = ''
     lc = ''
     hy = 0
     ly = 0
+
+    # set the first country value
+    old_country = 'AFG'
+
+    # hold the country names in a list
+    country_list = ['Afghanistan']
+
+    # var to find averages
     avg = 0
+    count = 0
+
+    # find the oldest year in the records
+    lowest = 1800
 
     # dic declaration to hold all countries values.
     all_countries = dict()
-
-    prompt = 'What would you like to do? (type 0 to see the options again) '
-
-    options()
-
-    choice = input(prompt)
-
-    # not working to error check
-    # while type(int(choice)) != int:
-    #     print(f'This is not an whole number. Please input a valid value.')
-    #     choice = input('What would you like to do? (type 0 to see the options again) ')
-
-    try:
-        choice = int(choice)
-    except ValueError:
-        print("That is not a whole number!")
-
-    # if the user types 0, they will see the options again.
-    while choice == '0':
-        options()
-        choice = input(
-            'What would you like to do? (type 0 to see the options again) ')
-
-    # if the choice is not from 1-3, set choice as default for displaying
-    if choice not in ['1', '2', '3']:
-        choice = '9'
-
-    # convert choice to an int.
-    choice = int(choice)
-
-    right = 'empty'
-
-    if choice == 1:
-        # Prompt the user for a year
-        year_choice = int(
-            input('Please enter a year you would like to check: '))
-    elif choice == 2:
-        coun_choice = input("What country would you like to check: ")
 
     for line in data:
         cl = line.strip().split(',')
@@ -157,58 +144,105 @@ with open('life-expectancy.csv') as data:
         year = int(cl[2])
         life_expec = float(cl[3])
 
-        # check to see if the user did pick a year
+        # find the oldest year in the records
+        if year < lowest:
+            lowest = year
 
+        # default choice. Find high/low w/country+year and average
         if choice == 9:
+            avg += life_expec
+            count += 1
+
             # find new life expect high
-            if life_expec > lfh:
-                lfh = life_expec
+            if life_expec > h_lf:
+                h_lf = life_expec
                 hc = country
                 hy = year
             # find new life expect low
-            if life_expec < lfl:
-                lfl = life_expec
+            if life_expec < l_lf:
+                l_lf = life_expec
                 lc = country
                 ly = year
-        # Find the high/low for a specific year
+
+        # Find the high/low for a specific year and average of all data
         elif choice == 1:
             # check to see if the year input is the year in the database
             if year_choice == year:
-                # Make sure data is printing out correctly
-                right = 'right_stuff'
+
+                avg += life_expec
+                count += 1
+
                 # find new life expect high
-                if life_expec > lfh:
-                    lfh = life_expec
+                if life_expec > h_lf:
+                    h_lf = life_expec
                     hc = country
                     hy = year
                 # find new life expect low
-                if life_expec < lfl:
-                    lfl = life_expec
-                    lc = country
-                    ly = year
-        # find the average of all the countries
-        elif choice == 2:
-            # check to see if country code is in the dictionary
-            if code in all_countries[0]:
-                all_countries[code] += [life_expec, 1]
-            else:
-                all_countries[code] = [life_expec, 1]
-                # Make sure data is printing out correctly
-                right = 'right_stuff'
-                # find new life expect high
-                if life_expec > lfh:
-                    lfh = life_expec
-                    hc = country
-                    hy = year
-                # find new life expect low
-                if life_expec < lfl:
-                    lfl = life_expec
+                if life_expec < l_lf:
+                    l_lf = life_expec
                     lc = country
                     ly = year
 
-    # print out the highs and lows
-    print(
-        f'The highest life expect was {lfh} in the year {hy} in the country {hc}.')
-    print(
-        f'The highest life expect was {lfl} in the year {ly} in the country {lc}.')
-    print(right, choice)
+        # find the average for a certain country
+        elif choice == 2:
+            # check to see if the year input is the year in the database
+            if coun_choice.lower() == country.lower():
+
+                avg += life_expec
+                count += 1
+
+                # find new life expect high
+                if life_expec > h_lf:
+                    h_lf = life_expec
+                    hc = country
+                    hy = year
+                # find new life expect low
+                if life_expec < l_lf:
+                    l_lf = life_expec
+                    lc = country
+                    ly = year
+
+        # find the average of all the countries
+        elif choice == 3:
+            # check to see if country code is in the dictionary
+            if code in all_countries:
+                all_countries[code] += [life_expec]
+            else:
+                all_countries[code] = [life_expec]
+
+            if old_country != country:
+                old_country = country
+                all_choice -= 1
+                # add country names to list
+                country_list.append(country)
+            if all_choice <= 0:
+                break
+
+    print('\n')
+    # print(my_set)
+
+    # print out the high/low if use did not choose country option.
+    if choice == 9 or choice == 1:
+        print(f'The highest life expectancy was {h_lf} in the year {hy} in the country {hc}.')
+        print(f'The lowest life expectacny was {l_lf} in the year {ly} in the country {lc}.')
+
+    # print out average for all years - option 9/default
+    if choice == 9:
+        print(f'The average was {avg/count:.2f} for all the years.')
+
+    # print out average for specific year.
+    if choice == 1:
+        print(f'The average was {avg/count:.2f} for the year {year_choice}.')
+
+    # print out the average for the certain country.
+    if choice == 2:
+        print(f'The highest life expectancy for {coun_choice} was {h_lf} in the year {hy}.')
+        print(f'The lowest life expectacny for {coun_choice} was {l_lf} in the year {ly}.')
+        print(f'The average was {avg/count:.2f} for {coun_choice}.')
+
+    # print out the average of the countries and their names.
+    if choice == 3:
+        strt = 1
+        for i in all_countries:
+            print(f'The average of {country_list[strt]} is: {sum(all_countries[i])/len(all_countries[i]):.3f}')
+            strt += 1
