@@ -264,8 +264,8 @@ with open('life-expectancy.csv') as data:
 
     # print out the average for the certain country.
     if choice == 2:
-        print(f'The highest life expectancy for {coun_choice} was {h_lf} in the year {hy}.')
-        print(f'The lowest life expectacny for {coun_choice} was {l_lf} in the year {ly}.')
+        print(f'The highest life expectancy for {coun_choice} was {h_lf:.3f} in the year {hy}.')
+        print(f'The lowest life expectacny for {coun_choice} was {l_lf:.3f} in the year {ly}.')
         print(f'The average was {avg/count:.2f} for {coun_choice}.')
 
     # print out the average of the countries and their names.
